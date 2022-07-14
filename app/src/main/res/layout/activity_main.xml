@@ -24,4 +24,11 @@
         android:id="@+id/btn_sample_2"
         android:layout_height="wrap_content"/>
 
+    <com.google.android.material.button.MaterialButton
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:text="sample 3"
+        android:id="@+id/btn_sample_3"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>
