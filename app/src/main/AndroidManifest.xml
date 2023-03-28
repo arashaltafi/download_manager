@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DownloadManager">
         <activity
+            android:name=".sample3.Sample3"
+            android:exported="false"/>
+        <activity
             android:name=".sample4.Sample4"
             android:exported="false">
             <meta-data
