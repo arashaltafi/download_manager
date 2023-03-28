@@ -27,7 +27,7 @@ class Sample4 : AppCompatActivity() {
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             request.setDestinationInExternalPublicDir(
                 Environment.DIRECTORY_DOWNLOADS,
-                "/TestDownload/movie.apk"
+                "/TestDownload/${System.currentTimeMillis()}.jpg"
             )
             downloadManager.enqueue(request)
         }
