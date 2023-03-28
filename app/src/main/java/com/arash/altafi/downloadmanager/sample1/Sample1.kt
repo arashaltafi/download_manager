@@ -19,10 +19,10 @@ import ir.siaray.downloadmanagerplus.utils.Utils
 
 class Sample1 : AppCompatActivity() {
 
-    private val description : String = "This is a description For Test"
+    private val description: String = "This is a description For Test"
     private var mPermissionGranted = false
     private val RC_PERMISSION = 10
-    private lateinit var downloader : Downloader
+    private lateinit var downloader: Downloader
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,37 +35,52 @@ class Sample1 : AppCompatActivity() {
 
     private fun init() {
         btn_download_1_sample1.setOnClickListener {
-            
+
             downloader
                 .setUrl("https://arashaltafi.ir/Social_Media/story-00.jpg")
                 .setListener(object : DownloadListener {
                     override fun onComplete(totalBytes: Int) {
-                        Toast.makeText(this@Sample1 , "onComplete" , Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Sample1, "onComplete", Toast.LENGTH_SHORT).show()
                         pr_sample1.visibility = View.GONE
                     }
 
-                    override fun onPause(percent: Int, reason: DownloadReason?, totalBytes: Int, downloadedBytes: Int) {
-                        Toast.makeText(this@Sample1 , "onPause" , Toast.LENGTH_SHORT).show()
+                    override fun onPause(
+                        percent: Int,
+                        reason: DownloadReason?,
+                        totalBytes: Int,
+                        downloadedBytes: Int
+                    ) {
+                        Toast.makeText(this@Sample1, "onPause", Toast.LENGTH_SHORT).show()
                         pr_sample1.visibility = View.GONE
                     }
 
                     override fun onPending(percent: Int, totalBytes: Int, downloadedBytes: Int) {
-                        Toast.makeText(this@Sample1 , "onPending" , Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Sample1, "onPending", Toast.LENGTH_SHORT).show()
                         downloader.showProgress()
                         pr_sample1.visibility = View.VISIBLE
                     }
 
-                    override fun onFail(percent: Int, reason: DownloadReason?, totalBytes: Int, downloadedBytes: Int) {
-                        Toast.makeText(this@Sample1 , "onFail" , Toast.LENGTH_SHORT).show()
+                    override fun onFail(
+                        percent: Int,
+                        reason: DownloadReason?,
+                        totalBytes: Int,
+                        downloadedBytes: Int
+                    ) {
+                        Toast.makeText(this@Sample1, "onFail", Toast.LENGTH_SHORT).show()
                         pr_sample1.visibility = View.GONE
                     }
 
                     override fun onCancel(totalBytes: Int, downloadedBytes: Int) {
-                        Toast.makeText(this@Sample1 , "onCancel" , Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Sample1, "onCancel", Toast.LENGTH_SHORT).show()
                         pr_sample1.visibility = View.GONE
                     }
 
-                    override fun onRunning(percent: Int, totalBytes: Int, downloadedBytes: Int, downloadSpeed: Float) {
+                    override fun onRunning(
+                        percent: Int,
+                        totalBytes: Int,
+                        downloadedBytes: Int,
+                        downloadSpeed: Float
+                    ) {
 //                        Toast.makeText(this@Sample1 , "onRunning" , Toast.LENGTH_SHORT).show()
                     }
 
@@ -107,12 +122,14 @@ class Sample1 : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 mPermissionGranted = false
-                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), RC_PERMISSION)
+                requestPermissions(
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    RC_PERMISSION
+                )
             } else {
                 mPermissionGranted = true
             }
-        }
-        else {
+        } else {
             mPermissionGranted = true
         }
     }

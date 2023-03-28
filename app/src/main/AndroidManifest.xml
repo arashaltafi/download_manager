@@ -26,9 +26,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".sample3.Sample3"
-            android:exported="false" />
-        <activity
             android:name=".sample2.Sample2"
             android:exported="false" />
         <activity

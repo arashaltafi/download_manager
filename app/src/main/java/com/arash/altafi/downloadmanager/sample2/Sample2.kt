@@ -13,7 +13,6 @@ import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.FetchListener
 import com.tonyodev.fetch2core.DownloadBlock
 import ir.siaray.downloadmanagerplus.enums.Storage
-import java.util.jar.Manifest
 
 class Sample2 : AppCompatActivity() {
 
@@ -30,7 +29,8 @@ class Sample2 : AppCompatActivity() {
         setContentView(R.layout.activity_sample2)
 
         checkPermission()
-        val fetchConfiguration: FetchConfiguration = Builder(this).setDownloadConcurrentLimit(3).build()
+        val fetchConfiguration: FetchConfiguration =
+            Builder(this).setDownloadConcurrentLimit(3).build()
         fetch = Fetch.Impl.getInstance(fetchConfiguration)
         init()
     }
@@ -44,7 +44,7 @@ class Sample2 : AppCompatActivity() {
             fetch.enqueue(request, { updatedRequest: Request? ->
                 //Request was successfully enqueued for download.
             }) { error: Error? ->
-                Toast.makeText(this , error.toString() , Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show()
             }
 
 
@@ -53,47 +53,72 @@ class Sample2 : AppCompatActivity() {
                     if (request.id == download.id) {
 //                        showDownloadInList(download)
                     }
-                    Toast.makeText(this@Sample2 , "onQueued" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Sample2, "onQueued", Toast.LENGTH_SHORT).show()
                 }
+
                 override fun onCompleted(download: Download) {
-                    Toast.makeText(this@Sample2 , "onCompleted" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Sample2, "onCompleted", Toast.LENGTH_SHORT).show()
                 }
-                override fun onProgress(download: Download, etaInMilliSeconds: Long, downloadedBytesPerSecond: Long) {
+
+                override fun onProgress(
+                    download: Download,
+                    etaInMilliSeconds: Long,
+                    downloadedBytesPerSecond: Long
+                ) {
                     if (request.id == download.id) {
 //                        updateDownload(download, etaInMilliSeconds)
                     }
                     val progress = download.progress
-                    Toast.makeText(this@Sample2 , "onProgress" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Sample2, "onProgress", Toast.LENGTH_SHORT).show()
                 }
+
                 override fun onPaused(download: Download) {
-                    Toast.makeText(this@Sample2 , "onPaused" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Sample2, "onPaused", Toast.LENGTH_SHORT).show()
                 }
+
                 override fun onResumed(download: Download) {
-                    Toast.makeText(this@Sample2 , "onResumed" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Sample2, "onResumed", Toast.LENGTH_SHORT).show()
                 }
-                override fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int) {
-                    Toast.makeText(this@Sample2 , "onStarted" , Toast.LENGTH_SHORT).show()
+
+                override fun onStarted(
+                    download: Download,
+                    downloadBlocks: List<DownloadBlock>,
+                    totalBlocks: Int
+                ) {
+                    Toast.makeText(this@Sample2, "onStarted", Toast.LENGTH_SHORT).show()
                 }
+
                 override fun onWaitingNetwork(download: Download) {
-                    Toast.makeText(this@Sample2 , "onWaitingNetwork" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Sample2, "onWaitingNetwork", Toast.LENGTH_SHORT).show()
                 }
+
                 override fun onAdded(download: Download) {
-                    Toast.makeText(this@Sample2 , "onAdded" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Sample2, "onAdded", Toast.LENGTH_SHORT).show()
                 }
+
                 override fun onCancelled(download: Download) {
-                    Toast.makeText(this@Sample2 , "onCancelled" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Sample2, "onCancelled", Toast.LENGTH_SHORT).show()
                 }
+
                 override fun onRemoved(download: Download) {
-                    Toast.makeText(this@Sample2 , "onRemoved" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Sample2, "onRemoved", Toast.LENGTH_SHORT).show()
                 }
+
                 override fun onDeleted(download: Download) {
-                    Toast.makeText(this@Sample2 , "onDeleted" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Sample2, "onDeleted", Toast.LENGTH_SHORT).show()
                 }
-                override fun onDownloadBlockUpdated(download: Download, downloadBlock: DownloadBlock, totalBlocks: Int) {
-                    Toast.makeText(this@Sample2 , "onDownloadBlockUpdated" , Toast.LENGTH_SHORT).show()
+
+                override fun onDownloadBlockUpdated(
+                    download: Download,
+                    downloadBlock: DownloadBlock,
+                    totalBlocks: Int
+                ) {
+                    Toast.makeText(this@Sample2, "onDownloadBlockUpdated", Toast.LENGTH_SHORT)
+                        .show()
                 }
+
                 override fun onError(download: Download, error: Error, throwable: Throwable?) {
-                    Toast.makeText(this@Sample2 , "onError" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Sample2, "onError", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -105,8 +130,12 @@ class Sample2 : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 mPermissionGranted = false
-                requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE ,
-                                           android.Manifest.permission.WRITE_EXTERNAL_STORAGE), RC_PERMISSION)
+                requestPermissions(
+                    arrayOf(
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ), RC_PERMISSION
+                )
             } else {
                 mPermissionGranted = true
             }
