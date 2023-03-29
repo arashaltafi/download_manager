@@ -5,10 +5,15 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.util.concurrent.TimeUnit
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
@@ -127,4 +132,25 @@ fun View.toGone() {
 
 fun View.isGone(): Boolean {
     return this.visibility == View.GONE
+}
+
+fun <F> runAfter(
+    delay: Long, total: Long, fn: (Long) -> F, fc: () -> F,
+    unit: TimeUnit = TimeUnit.MILLISECONDS
+): Disposable {
+    return Flowable.interval(0, delay, unit)
+        .observeOn(AndroidSchedulers.mainThread())
+        .takeWhile { it != total }
+        .doOnNext { fn(it) }
+        .doOnComplete { fc() }
+        .subscribe()
+}
+
+fun <F> runAfter(
+    delay: Long, fx: () -> F, unit: TimeUnit = TimeUnit.MILLISECONDS
+): Disposable {
+    return Completable.timer(delay, unit)
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnComplete { fx() }
+        .subscribe()
 }
