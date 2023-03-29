@@ -195,15 +195,11 @@ class Sample3 : AppCompatActivity() {
 
         btn_get_download_3.setOnClickListener {
             val folder = getDownloadedFolder("FolderName")
-            val targetPath =
-                folder?.findImage()?.firstOrNull {
-                    it.fileName(withSuffix = false) == "fileName".fileName(withSuffix = false)
-                }
-
-            targetPath?.let {
-                val imageUri = Uri.parse(targetPath)
-                image.setImageURI(imageUri)
-            }
+            val cacheFile = File(folder, fileName.substringBeforeLast("."))
+            if (cacheFile.exists())
+                image.setImageURI(cacheFile.toUri())
+            else
+                toast("file don't download")
         }
 
         btn_save_to_download.setOnClickListener {
