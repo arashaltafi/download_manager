@@ -19,12 +19,38 @@ class Sample3 : AppCompatActivity() {
 
     private lateinit var fetch: Fetch
     private var fetchManager: FetchManager? = null
+    private val fileName = "fileName"
+    private val folderName = "FolderName"
 
     private val registerStorageResult = PermissionUtils.register(
         this,
         object : PermissionUtils.PermissionListener {
             override fun observe(permissions: Map<String, Boolean>) {
                 if (permissions[Manifest.permission.WRITE_EXTERNAL_STORAGE] == true) {
+                    Toast.makeText(
+                        this@Sample3,
+                        "permission storage is granted",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        this@Sample3,
+                        "permission storage is not granted",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
+
+    private val registerStorageResultAndroid13 = PermissionUtils.register(
+        this,
+        object : PermissionUtils.PermissionListener {
+            override fun observe(permissions: Map<String, Boolean>) {
+                if (
+                    permissions[Manifest.permission.READ_MEDIA_IMAGES] == true &&
+                    permissions[Manifest.permission.READ_MEDIA_VIDEO] == true &&
+                    permissions[Manifest.permission.READ_MEDIA_AUDIO] == true
+                ) {
                     Toast.makeText(
                         this@Sample3,
                         "permission storage is granted",
@@ -161,7 +187,7 @@ class Sample3 : AppCompatActivity() {
     }
 
     private fun init() {
-        val fileName = "fileName"
+
         val downloadLink = "https://arashaltafi.ir/arash.jpg"
 
         btn_download_3.setOnClickListener {
@@ -170,7 +196,7 @@ class Sample3 : AppCompatActivity() {
                 this,
                 fetch,
                 downloadLink = downloadLink,
-                parentFolderName = "FolderName",
+                parentFolderName = folderName,
                 fileName = fileName,
                 fileSizeKb = 1000L
             ).apply {
@@ -194,7 +220,7 @@ class Sample3 : AppCompatActivity() {
         }
 
         btn_get_download_3.setOnClickListener {
-            val folder = getDownloadedFolder("FolderName")
+            val folder = getDownloadedFolder(folderName)
             val cacheFile = File(folder, fileName.substringBeforeLast("."))
             if (cacheFile.exists())
                 image.setImageURI(cacheFile.toUri())
@@ -203,59 +229,69 @@ class Sample3 : AppCompatActivity() {
         }
 
         btn_save_to_download.setOnClickListener {
-            if (!PermissionUtils.isGranted(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (
+                    !PermissionUtils.isGranted(
+                        this,
+                        Manifest.permission.READ_MEDIA_IMAGES,
+                        Manifest.permission.READ_MEDIA_VIDEO,
+                        Manifest.permission.READ_MEDIA_AUDIO
+                    )
+                ) {
+                    PermissionUtils.requestPermission(
+                        this, registerStorageResultAndroid13,
+                        Manifest.permission.READ_MEDIA_IMAGES,
+                        Manifest.permission.READ_MEDIA_VIDEO,
+                        Manifest.permission.READ_MEDIA_AUDIO
+                    )
+                } else {
+                    afterPermissionGranted()
+                }
+            } else {
+                if (!PermissionUtils.isGranted(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                            PermissionUtils.requestPermission(
+                                this, registerStorageResult,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            )
+                        } else {
+                            intentToSetting()
+                        }
+                    } else {
                         PermissionUtils.requestPermission(
                             this, registerStorageResult,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE
                         )
-                    } else {
-                        intentToSetting()
                     }
                 } else {
-                    PermissionUtils.requestPermission(
-                        this, registerStorageResult,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    )
-                }
-            } else {
-                val fileName = "fileName.jpg"
-
-                val cacheDir = getDownloadedFolder("FolderName")
-                val downloadDir =
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-
-                val cacheFile = File(cacheDir, fileName.substringBeforeLast("."))
-                val downloadFile = File(downloadDir, fileName)
-
-                if (downloadFile.exists()) {
-                    toast("file already saved in DIRECTORY_DOWNLOADS")
-                    image.setImageURI(downloadFile.toUri())
-                } else {
-                    if (cacheFile.exists()) {
-                        cacheFile.copyTo(downloadFile, true)
-                        toast("file added in download")
-
-                        runAfter(500, {
-                            val targetPath =
-                                cacheFile.findImage().firstOrNull {
-                                    it.fileName(withSuffix = false) == "fileName".fileName(
-                                        withSuffix = false
-                                    )
-                                }
-                            targetPath?.let {
-                                val imageUri = Uri.parse(targetPath)
-                                image.setImageURI(imageUri)
-                            }
-                        })
-                    } else {
-                        toast("file not exists please download first")
-                    }
+                    afterPermissionGranted()
                 }
             }
         }
 
+    }
+
+    private fun afterPermissionGranted() {
+        val cacheDir = getDownloadedFolder(folderName)
+        val downloadDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+
+        val cacheFile = File(cacheDir, fileName.substringBeforeLast("."))
+        val downloadFile = File(downloadDir, "$fileName.jpg")
+
+        if (downloadFile.exists()) {
+            toast("file already saved in DIRECTORY_DOWNLOADS")
+            image.setImageURI(downloadFile.toUri())
+        } else {
+            if (cacheFile.exists()) {
+                cacheFile.copyTo(downloadFile, true)
+                image.setImageURI(cacheFile.toUri())
+                toast("file added in download")
+            } else {
+                toast("file not exists please download first")
+            }
+        }
     }
 
     private fun intentToSetting() {
