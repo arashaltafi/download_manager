@@ -2,12 +2,10 @@ package com.arash.altafi.downloadmanager.sample3
 
 import android.content.Context
 import android.net.Uri
-import android.os.Environment
 import androidx.core.net.toUri
 import com.arash.altafi.downloadmanager.sample3.FetchManager.Companion.DOWNLOAD_FOLDER_NAME
 import com.tonyodev.fetch2.*
 import com.tonyodev.fetch2core.DownloadBlock
-import ir.siaray.downloadmanagerplus.enums.Storage
 import java.io.File
 import java.io.FileFilter
 
@@ -133,10 +131,12 @@ class FetchManager(
 
             if (path.endsWith(".zip"))
                 path.takeIf { f.unzip() }?.let {
-                    onResult(true, File(file).toUri())
+//                    onResult(true, File(file).toUri())
+                    onResult(true, f.toUri())
                 } ?: run { onResult(false, null) }
             else
-                onResult(true, File(file).toUri())
+//                onResult(true, File(file).toUri())
+                onResult(true, f.toUri())
 
             fetch.removeListener(listener)
         }
