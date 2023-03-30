@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import com.arash.altafi.downloadmanager.R
+import com.arash.altafi.downloadmanager.sample3.toast
 import kotlinx.android.synthetic.main.activity_sample4.*
 
 class Sample4 : AppCompatActivity() {
@@ -14,6 +15,7 @@ class Sample4 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample4)
 
+        toast("Sample DownloadManager Basic")
         init()
     }
 

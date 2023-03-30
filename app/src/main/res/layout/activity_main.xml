@@ -16,13 +16,6 @@
         android:text="sample 1" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_sample_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="sample 2" />
-
-    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sample_3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

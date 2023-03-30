@@ -70,6 +70,8 @@ class Sample3 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample3)
 
+        toast("Sample FetchManager Advanced")
+
         val fetchConfiguration: FetchConfiguration =
             FetchConfiguration.Builder(this)
                 .setDownloadConcurrentLimit(10)

@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.view.View
 import android.widget.Toast
+import com.arash.altafi.downloadmanager.sample3.toast
 import ir.siaray.downloadmanagerplus.classes.Downloader
 import ir.siaray.downloadmanagerplus.enums.DownloadReason
 import ir.siaray.downloadmanagerplus.enums.Storage
@@ -27,6 +28,8 @@ class Sample1 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample1)
+
+        toast("Sample DownloadManager Advanced")
 
         downloader = Downloader.getInstance(this)
         checkPermission()
